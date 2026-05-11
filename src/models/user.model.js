@@ -9,7 +9,7 @@ const userSchema = new Schema(
             required: true,
             unique: true,
             lowercase: true,
-            tirm: true,
+            trim: true,
             index: true
         },
         email: {
@@ -27,7 +27,7 @@ const userSchema = new Schema(
         },
         avatar: {
             type: String,
-            required: true,
+            //required: true,
         },
         coverImage: {
             type: String,
@@ -50,11 +50,10 @@ const userSchema = new Schema(
         timestamps: true,
     });
 
-userSchema.pre("save", async function (next) {
-    if(!this.isModified("password")) return next();
+userSchema.pre("save", async function() {
+    if(!this.isModified("password")) return;
 
     this.password = await bcrypt.hash(this.password, 10);
-    next();
 })
 
 userSchema.methods.isPasswordCorrect =  async function (password) {
@@ -86,4 +85,4 @@ userSchema.methods.generateRefreshToken = function(){
 )
 }
 
-export const User = mongoose.model("USer", userSchema);
+export const User = mongoose.model("User", userSchema);
